@@ -15,6 +15,7 @@ class ArticleList {}
 
 //
 //
+//
 
 @Component(selector: 'article')
 @View(
@@ -25,6 +26,7 @@ class ArticleList {}
     directives: const [ROUTER_DIRECTIVES])
 class Article {}
 
+//
 //
 //
 
@@ -48,6 +50,7 @@ class Index {
   Index(Router this.router);
 }
 
+//
 //
 //
 
