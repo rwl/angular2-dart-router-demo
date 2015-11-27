@@ -1,5 +1,13 @@
-name: router_demo
+name: angular2_dart_router_demo
+version: 0.0.1-alpha.46
+authors:
+- Rado Kirov <rkirov@gmail.com>
+- Richard Lincoln <r.w.lincoln@gmail.com>
+description: Angular 2 routing and navigation demo
+homepage: https://github.com/rwl/angular2_router_demo
 dependencies:
-  angular2:
-    path: 'angular2'
+  angular2: '>=2.0.0-alpha.46'
   browser: any
+transformers:
+- angular2:
+    entry_points: web/main.dart

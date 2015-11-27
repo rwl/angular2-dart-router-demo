@@ -1,64 +1,59 @@
 import 'package:angular2/angular2.dart';
 import 'package:angular2/router.dart';
-import 'package:router_demo/components/home/home.dart';
+import 'package:angular2/bootstrap.dart';
 
-import 'package:angular2/src/reflection/reflection.dart' show reflector;
-import 'package:angular2/src/reflection/reflection_capabilities.dart' show ReflectionCapabilities;
-
-@Component(
-  selector: 'foo'
-)
+@Component(selector: 'article-list')
 @View(
-  template: 'foo {{id}}'
-)
-class FooCmp {
-  String id;
-  FooCmp(RouteParams pr) {
-    id = pr.get('id');
-    print(id);
-  }
-}
+    template: '''
+<h1>Articles</h1>
+<ul>
+<li><a [router-link]="[ '/Article', {articleId: 'article1'} ]">Article 1</a>
+</ul>
+''',
+    directives: const [ROUTER_DIRECTIVES])
+class ArticleList {}
 
-@Component(
-  selector: 'bar'
-)
-@View(
-  template: 'bar'
-)
-class BarCmp {}
+//
+//
 
-@Component(
-  selector: 'my-app'
-)
+@Component(selector: 'article')
 @View(
-  template: '<button (click)="go()">Go</button><router-outlet></router-outlet><a router-link="bar">link</a>',
-  directives: const [RouterOutlet, RouterLink]
-)
-@RouteConfig(const [const {
-  'path': '/',
-  'component': HomeComp
-},
-const {
-  'path': '/foo/:id',
-  'component': FooCmp
-},
-const {
-  'path': '/bar',
-  'component': BarCmp,
-  'as': 'bar'
-}
+    template: '''
+<h1>Article</h1>
+<a [router-link]="[ '/ArticleList' ]">View All</a>
+''',
+    directives: const [ROUTER_DIRECTIVES])
+class Article {}
+
+//
+//
+
+@Component(selector: 'my-app')
+@View(
+    template: '''
+<div>
+  <base href="/">
+  <router-outlet></router-outlet>
+</div>
+''',
+    directives: const [ROUTER_DIRECTIVES])
+@RouteConfig(const [
+  const Redirect(path: '/', redirectTo: '/articles'),
+  const Route(path: '/articles', name: 'ArticleList', component: ArticleList),
+  const Route(path: '/:articleId', name: 'Article', component: Article)
 ])
-class AppComp {
-  Router r;
-  AppComp(Router this.r);
+class Index {
+  Router router;
 
-  go() {
-    r.navigate('/bar');
-  }
+  Index(Router this.router);
 }
+
+//
+//
 
 main() {
-  assert(false);
-  reflector.reflectionCapabilities = new ReflectionCapabilities();
-  bootstrap(AppComp, routerInjectables);
+  bootstrap(Index, [
+    ROUTER_PROVIDERS,
+//    provide(LocationStrategy, useClass: HashLocationStrategy)
+  ]);
 }
