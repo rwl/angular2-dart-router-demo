@@ -1,3 +1,11 @@
-pubspec.lock
-packages/
+.buildlog
+.DS_Store
+.idea
 .pub/
+build/
+packages
+.packages
+pubspec.lock
+*.iml
+.project
+.settings/
