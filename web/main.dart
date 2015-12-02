@@ -7,28 +7,13 @@ import 'package:angular2/bootstrap.dart';
     template: '''
 <h1>Articles</h1>
 <ul>
-<li><a [router-link]="[ '/Article/View', {articleId: 'article1'} ]">Article 1</a>
-<!-- <li><a (click)="onClick()">Article 1</a> -->
+<li><a [router-link]="[ '/Article', {articleId: selectedId}, 'View', {articleId: selectedId} ]">Article 1</a>
 </ul>
 ''',
     directives: const [ROUTER_DIRECTIVES])
 class ArticleList {
-  Router router;
-  ArticleList(this.router);
-  onClick() {
-//    router.navigateByUrl('/article/article1/view');
-    var inst = router.generate([
-      '/Article/View',
-      {'articleId': 'article1'}
-    ]);
-    print(inst.component.params);
-    print(inst.component.urlParams);
-    print(inst.component.urlPath);
-//    router.navigate([
-//      '/Article/View',
-//      {'articleId': 'article1'}
-//    ]);
-  }
+  String selectedId = 'article1';
+  ArticleList();
 }
 
 //
@@ -39,24 +24,24 @@ class ArticleList {
 @View(
     template: '''
 <h1>Article Editor</h1>
-<a [router-link]="[ '/Article/View', {articleId: routeParams.get('articleId')} ]">View</a>
+<a [router-link]="[ '/Article', {articleId: id}, 'View', {articleId: id} ]">View</a>
 ''',
     directives: const [ROUTER_DIRECTIVES])
 class ArticleEditor {
-  final RouteParams routeParams;
-  ArticleEditor(this.routeParams);
+  String id;
+  ArticleEditor(RouteParams routeParams) : id = routeParams.get('articleId');
 }
 
 @Component(selector: 'article-view')
 @View(
     template: '''
 <h1>Article View</h1>
-<a [router-link]="[ '/Article/Edit', {articleId: routeParams.get('articleId')} ]">Edit</a>
+<a [router-link]="[ '/Article', {articleId: id}, 'Edit', {articleId: id} ]">Edit</a>
 ''',
     directives: const [ROUTER_DIRECTIVES])
 class ArticleView {
-  final RouteParams routeParams;
-  ArticleView(this.routeParams);
+  String id;
+  ArticleView(RouteParams routeParams) : id = routeParams.get('articleId');
 }
 
 @Component(selector: 'article')
@@ -68,8 +53,8 @@ class ArticleView {
 ''',
     directives: const [ROUTER_DIRECTIVES])
 @RouteConfig(const [
-  const Route(path: '/:articleId/edit', name: 'Edit', component: ArticleEditor),
-  const Route(path: '/:articleId/view', name: 'View', component: ArticleView)
+  const Route(path: '/edit/:articleId', name: 'Edit', component: ArticleEditor),
+  const Route(path: '/view/:articleId', name: 'View', component: ArticleView)
 ])
 class Article {}
 
@@ -89,9 +74,8 @@ class Article {}
 @RouteConfig(const [
   const Redirect(path: '/', redirectTo: '/articles'),
   const Route(path: '/articles', name: 'ArticleList', component: ArticleList),
-  const Route(path: '/article/...', name: 'Article', component: Article),
-//  const Route(
-//      path: '/article/:articleId/...', name: 'Article', component: Article)
+  const Route(
+      path: '/article/:articleId/...', name: 'Article', component: Article)
 ])
 class Index {
   Router router;
